@@ -47,6 +47,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.raghul.materialtheming.data.Dog
 import com.raghul.materialtheming.data.dogs
+import com.raghul.materialtheming.heroes.HeroesRepository
 import com.raghul.materialtheming.ui.theme.MaterialThemingTheme
 import com.raghul.materialtheming.ui.theme.Shapes
 
@@ -60,7 +61,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Faig()
+                    SuperheroesApp()
                 }
             }
         }
@@ -225,7 +226,8 @@ fun DogItem(
                         dampingRatio = Spring.DampingRatioNoBouncy,
                         stiffness = Spring.StiffnessMedium
                     )
-                ).background(color = color)
+                )
+                .background(color = color)
 
         ) {
             Row(
@@ -254,3 +256,37 @@ fun DogItem(
         }
     }
 }
+
+//Heroes app
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SuperheroesApp() {
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        topBar = {
+            heroTopAppBar()
+        }
+    ) {
+        /* Important: It is not a good practice to access data source directly from the UI.
+        In later units you will learn how to use ViewModel in such scenarios that takes the
+        data source as a dependency and exposes heroes.
+         */
+        val heroes = HeroesRepository.heroes
+        HeroesList(heroes = heroes, contentPadding = it)
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun heroTopAppBar(modifier: Modifier = Modifier) {
+    CenterAlignedTopAppBar(
+        title = {
+            Text(
+                text = stringResource(R.string.app_name),
+                style = MaterialTheme.typography.displayLarge,
+            )
+        },
+        modifier = modifier
+    )
+}
+
